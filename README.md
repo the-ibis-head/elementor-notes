@@ -1,6 +1,6 @@
 # Mastering Elementor
 
-**Time to Read:** ~13 minutes
+**Time to Read:** ~8 minutes
 
 Elementor has evolved into one of the most powerful visual builders in the WordPress ecosystem. 
 This guide delivers a clear, technical path to mastering Elementor.
