@@ -608,6 +608,142 @@ video.addEventListener("loadedmetadata", function() {
 
 
 
+## Integrating Google Analytics With Elementor
+
+Adding Google Analytics to your WordPress + Elementor site is essential for tracking pageviews, conversions, user behavior, and the performance of your Elementor layouts. Below are the most reliable methods, from using Elementor’s built-in tools (Pro) to adding the tracking code manually (Free).
+
+### Why Track With Google Analytics?
+
+* Understand which Elementor pages perform best
+* Measure conversions for forms, buttons, popups, and funnels
+* Improve UX using behavior insights and scroll-depth data
+* Attribute traffic from marketing campaigns
+
+### Using Elementor Pro (Recommended)
+
+Elementor Pro provides a native **Site Settings → Integrations → Google Analytics** field.
+
+**Steps**
+
+1. In your Google Analytics dashboard (GA4), go to **Admin → Data Streams → Web → Measurement ID** (looks like `G-XXXXXXX`).
+2. In WordPress, open:
+   **Elementor → Settings → Integrations → Google Analytics**
+3. Paste your Measurement ID.
+4. Click **Save Changes**.
+5. Clear cache.
+
+Elementor automatically injects the GA4 tracking tag across your site—no manual code needed.
+
+### Manual GA4 Code Injection (Elementor Free)
+
+**Steps**
+
+1. In GA4: **Admin → Data Stream → Add Tag → Global site tag (gtag.js)**.
+2. Copy the script snippet.
+3. Install a header/footer script plugin (e.g., WPCode Lite).
+4. Add script to the header:
+
+```html
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-XXXXXXX');
+</script>
+```
+- [GA4 Setup Guide](https://support.google.com/analytics/answer/9304153)
+
+### Tracking Elementor Events in GA4
+
+Elementor widgets (forms, buttons, videos, popups) can be connected to Analytics events.
+
+### Elementor Form Submissions → GA4 Event
+
+Elementor Pro allows **Form → Actions After Submit → Webhook** or **Custom JS**.
+
+Example custom JS event:
+
+```js
+document.addEventListener('elementorPro/forms/new', (event) => {
+  gtag('event', 'form_submit', {
+    form_name: event.detail.formName
+  });
+});
+```
+
+- [Elementor Form JS Docs](https://developers.elementor.com/docs/forms-api/)
+
+### Tracking Scroll Depth (Elementor pages)
+
+You can track scroll depth using GTM’s built-in triggers:
+
+1. In GTM → **Triggers → Scroll Depth → Vertical 25/50/75/100**
+2. Create GA4 “scroll” events.
+3. Publish.
+
+This works automatically across Elementor pages, including long-form landing pages.
+
+### Tracking Elementor Ecommerce Conversions (WooCommerce + GA4)
+
+Google Analytics 4 includes enhanced measurement for ecommerce, but WooCommerce + Elementor requires additional configuration so product views, add-to-cart events, and purchases are captured correctly.
+
+Use the WooCommerce → Google Listings & Ads (Recommended, Free) plugin
+
+**Steps**
+
+1. Install **Google Listings & Ads** from Plugins → Add New.
+2. Connect your Google account.
+3. Enable **GA4 Ecommerce Tracking** in the setup wizard.
+4. Verify events in **GA4 → Admin → DebugView**.
+
+GA4 events handled automatically:
+
+* `view_item`
+* `add_to_cart`
+* `begin_checkout`
+* `purchase`
+* `view_cart`
+
+- [https://woocommerce.com/products/google-listings-and-ads/](https://woocommerce.com/products/google-listings-and-ads/)
+
+### Tracking Button Clicks on Elementor Pages (GA4)
+
+You can track clicks on any button inside Elementor—Pro or Free—using Google Tag Manager or custom JS.
+
+### Tracking Video Plays on Elementor Pages (YouTube/Vimeo)
+
+Elementor embeds videos using iframe players, so tracking requires GTM or the YouTube API.
+
+**Steps**
+
+1. In GTM → **Variables → Configure → Check "YouTube" variables**
+
+   * Video Title
+   * Video URL
+   * Video Provider
+   * Video Percent
+
+2. Add a new **YouTube Video Trigger**
+
+   * Trigger on: **Progress** (10%, 25%, 50%, 75%, 100%)
+   * Enable: “Add JavaScript API support to all YouTube videos”
+
+3. Create a **GA4 Event Tag**
+
+   * Event Name: `video_progress`
+   * Parameters: `video_title` → `{{Video Title}}`, `percent` → `{{Video Percent}}`
+
+Works even for videos placed inside Elementor widgets, popups, tabs, or sliders.
+
+
+
+
+
+
+
+
 
 
 
