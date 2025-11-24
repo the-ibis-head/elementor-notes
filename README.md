@@ -2,131 +2,129 @@
 
 **Time to Read:** ~13 minutes
 
-Elementor has evolved into one of the most powerful visual builders in the WordPress ecosystem. Whether you are a freelancer, agency, or in-house developer, Elementor’s combination of design freedom, extensibility, and workflow optimizations makes it a must-know tool. This guide delivers a clear, technical path to mastering Elementor—from high-performance local development using Laravel Valet to advanced design workflows and version control.
+Elementor has evolved into one of the most powerful visual builders in the WordPress ecosystem. 
+This guide delivers a clear, technical path to mastering Elementor.
 
 ---
 
-# 1. Local Setup with Laravel Valet and WP-CLI
+### Local Setup with Valet, WP-CLI & Astra/Elementor
 
-Setting up a fast, lightweight, UNIX-native WordPress development environment is the first step to developing professionally with Elementor. **Laravel Valet** offers a minimalistic, always-on dev stack that pairs perfectly with **WP-CLI** for rapid iteration.
-
-Below is the clean, consolidated setup process for macOS.
-
----
-
-## 1.1 Install Homebrew
-
-Homebrew is your system-level package manager.
+#### 1. Install Prereqs (macOS)
 
 ```bash
+# Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# PHP, MySQL, Mailpit, WP-CLI, Composer
+brew install php mysql mailpit wp-cli composer
+brew services start mysql
 ```
 
-Reload shell:
-
-```bash
-eval "$(/opt/homebrew/bin/brew shellenv)"
-```
+Homebrew: [https://brew.sh](https://brew.sh)
+PHP: [https://formulae.brew.sh/formula/php](https://formulae.brew.sh/formula/php)
+MySQL: [https://formulae.brew.sh/formula/mysql](https://formulae.brew.sh/formula/mysql)
+Mailpit: [https://github.com/axllent/mailpit](https://github.com/axllent/mailpit)
+WP-CLI: [https://wp-cli.org](https://wp-cli.org)
+Composer: [https://getcomposer.org](https://getcomposer.org)
 
 ---
 
-## 1.2 Install PHP 8.x, Composer, and Required Tools
-
-```bash
-brew install php composer wp-cli mariadb nginx
-brew services start mariadb
-```
-
-Verify versions:
-
-```bash
-php -v
-composer -V
-wp --info
-```
-
----
-
-## 1.3 Install Laravel Valet
-
-Valet gives you an automatic HTTPS-enabled dev environment with zero configuration.
+#### 2. Install & Configure Laravel Valet
 
 ```bash
 composer global require laravel/valet
+export PATH="$HOME/.config/composer/vendor/bin:$PATH"  # or ~/.composer/vendor/bin
 valet install
-```
 
-Optional (recommended):
-
-```bash
-valet trust
-```
-
----
-
-## 1.4 Create Your WordPress Development Directory
-
-This will be your workspace for all sites.
-
-```bash
-mkdir ~/Sites
-cd ~/Sites
+mkdir -p ~/Sites && cd ~/Sites
 valet park
 ```
 
-Valet will now auto-resolve any folder inside `~/Sites` as:
-
-```
-http://folder-name.test
-```
+Laravel Valet: [https://laravel.com/docs/valet](https://laravel.com/docs/valet)
 
 ---
 
-## 1.5 Create a New WordPress Site
+#### 3. Create a New WordPress Site
 
 ```bash
-mkdir mastering-elementor
-cd mastering-elementor
+cd ~/Sites
+SITE=elementor-site
+URL="$SITE.test"
+DB=elementor_site
+
+mkdir $SITE && cd $SITE
+valet link $SITE
 
 wp core download
-wp config create --dbname=me_local --dbuser=root --dbpass=''
+
+wp config create \
+  --dbname=$DB --dbuser=root --dbpass="" --dbhost=127.0.0.1
+
 wp db create
+
 wp core install \
-  --url="https://mastering-elementor.test" \
-  --title="Mastering Elementor" \
-  --admin_user="admin" \
-  --admin_password="password" \
-  --admin_email="admin@example.com"
+  --url="$URL" \
+  --title="Elementor Dev Site" \
+  --admin_user=admin \
+  --admin_password=password \
+  --admin_email=you@example.com
 ```
 
-Enable HTTPS:
-
-```bash
-valet secure mastering-elementor
-```
+WordPress: [https://wordpress.org/download](https://wordpress.org/download)
+Valet Link: [https://laravel.com/docs/valet#the-link-command](https://laravel.com/docs/valet#the-link-command)
+WP-CLI Core: [https://developer.wordpress.org/cli/commands/core](https://developer.wordpress.org/cli/commands/core)
 
 ---
 
-## 1.6 Install Astra Theme + Elementor Automatically
+#### 4. Create / Reset the Database & Site
+
+```bash
+# Create DB (if missing)
+wp db create
+
+# Full reset
+wp db reset --yes
+wp core install \
+  --url="$URL" \
+  --title="Elementor Dev Site" \
+  --admin_user=admin \
+  --admin_password=password \
+  --admin_email=you@example.com
+
+# Only wipe content
+wp site empty --yes
+```
+
+WP-CLI DB: [https://developer.wordpress.org/cli/commands/db](https://developer.wordpress.org/cli/commands/db)
+WP-CLI Site Empty: [https://developer.wordpress.org/cli/commands/site/empty](https://developer.wordpress.org/cli/commands/site/empty)
+
+---
+
+#### 5. Install Astra & Elementor
 
 ```bash
 wp theme install astra --activate
 wp plugin install elementor --activate
-wp plugin install astra-addon --activate --allow-root || true
+# wp plugin install /path/to/elementor-pro.zip --activate
 ```
 
-(If you have a paid Astra license, the add-on plugin requires manual upload or license activation.)
+Astra Theme: [https://wpastra.com](https://wpastra.com)
+Elementor: [https://elementor.com](https://elementor.com)
+WP-CLI Theme: [https://developer.wordpress.org/cli/commands/theme](https://developer.wordpress.org/cli/commands/theme)
+WP-CLI Plugin: [https://developer.wordpress.org/cli/commands/plugin](https://developer.wordpress.org/cli/commands/plugin)
 
 ---
 
-## 1.7 Optional: Reset Site Quickly During Development
-
-A helpful tool when repeatedly testing Elementor content structures.
+#### 6. Mailpit for Email Testing
 
 ```bash
-wp plugin install wordpress-reset --activate
-wp reset site --yes
+mailpit
 ```
+
+Mailpit Docs: [https://github.com/axllent/mailpit](https://github.com/axllent/mailpit)
+
+SMTP: `127.0.0.1:1025`
+UI: `http://localhost:8025`
 
 ---
 
