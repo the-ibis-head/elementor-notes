@@ -27,8 +27,6 @@ brew services start mysql
 - WP-CLI: [https://wp-cli.org](https://wp-cli.org)
 - Composer: [https://getcomposer.org](https://getcomposer.org)
 
----
-
 ### Install & Configure Laravel Valet
 
 ```bash
@@ -118,7 +116,7 @@ mailpit
 
 ---
 
-## Free vs Pro: What You Should Actually Use
+## Free vs Pro Versions
 
 When choosing between **Elementor Free** and **Elementor Pro**, it helps to understand how each version affects your workflow, design flexibility, and site-building capabilities.
 
@@ -167,22 +165,33 @@ Elementor Pro unlocks full site-building power and advanced marketing features. 
 
 ## Rolling Back Elementor Versions
 
-Elementor provides version control inside WordPress. This is invaluable when troubleshooting plugin conflicts or regressions.
+When an Elementor update introduces conflicts or regressions, rolling back to a stable version is a quick way to restore site functionality. Elementor provides built-in rollback tools, and you can also revert via WP-CLI or helper plugins.
 
-### Roll back from Dashboard
+### Roll Back from the Elementor Interface
 
-WordPress Admin →
-**Elementor → Tools → Version Control → Rollback**
+Elementor includes a built-in version control panel.
 
-### Using WP-CLI
+**Steps:**
 
-Run:
+1. Go to **WordPress Dashboard → Elementor → Tools → Version Control**
+2. Choose a previous version under **Rollback Version**
+3. Click **Reinstall**
+
+### Roll Back Using WP-CLI
+
+WP-CLI offers precise control and is ideal for developers working locally or on staging.
 
 ```bash
-wp plugin install elementor --version=3.20.1 --force
+# Roll back Elementor Free
+wp plugin install elementor --version=3.18.3 --force
+
+# Roll back Elementor Pro (needs valid license)
+wp plugin install elementor-pro --version=3.18.1 --force
 ```
 
-Replace with required version number.
+- [https://elementor.com/help/version-control-rollback/](https://elementor.com/help/version-control-rollback/)
+- [https://developer.wordpress.org/cli/commands/plugin/install/](https://developer.wordpress.org/cli/commands/plugin/install/)
+- [https://elementor.com/help/how-to-manually-update-elementor-pro/](https://elementor.com/help/how-to-manually-update-elementor-pro/)
 
 ---
 
