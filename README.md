@@ -313,6 +313,259 @@ var typed = new Typed('.typed-text', {
 });
 ```
 
+# 11. Integrating Elementor with ACF (Advanced Custom Fields)
+
+Elementor Pro pairs exceptionally well with **Advanced Custom Fields**, enabling fully dynamic, client-friendly, and scalable WordPress builds. This combination allows you to convert WordPress into a true CMS with structured data, reusable templates, and automated content layouts.
+
+This section provides a comprehensive approach to using ACF with Elementor, including field creation, dynamic binding, repeater loops, and advanced relationships.
+
+---
+
+## 11.1 Why Use ACF with Elementor?
+
+ACF adds structured data fields to posts, pages, custom post types, or global options pages. Elementor Pro can *bind* those fields to visual widgets, turning your designed layouts into dynamic templates that automatically update when content changes.
+
+Key benefits include:
+
+* Separation of **content** from **presentation**
+* Standardized inputs for non-technical clients
+* Centralized repeatable structures (Repeater, Flex Fields)
+* Advanced content modeling (Relationships, Post Objects, Taxonomy metadata)
+* Highly scalable, template-driven sites
+
+This is essential for real-world WordPress development, especially when working with large editorial teams or content-heavy websites.
+
+---
+
+## 11.2 Creating ACF Fields
+
+1. WordPress Admin → **Custom Fields → Add New**
+2. Create a field group, e.g. “Project Details”
+3. Add fields such as:
+
+   * **Text** (Project Title)
+   * **Image** (Featured Image Override)
+   * **Repeater** (Gallery Items)
+   * **URL** (External Link)
+   * **Select** (Project Type)
+4. Assign the field group to a location:
+
+   * Post Type = Projects
+   * Or specific pages, taxonomies, options, etc.
+
+Save the group.
+
+---
+
+## 11.3 Binding ACF Fields Inside Elementor
+
+Elementor Pro widgets feature a **Dynamic Tags** icon beside key input fields.
+
+Examples:
+
+### Text Binding
+
+Example: Title widget → Title → Dynamic Tags → ACF Field → “project_title”
+
+### Image Binding
+
+Image widget → Image → Dynamic Tags → ACF Image
+
+### URL Binding
+
+Button → Link field → Dynamic Tags → ACF URL
+
+### Choosing Format
+
+Each tag supports formatting such as:
+
+* Raw text
+* Link URL
+* Image ID
+* Image URL
+* Array → converted to human-readable output
+
+---
+
+## 11.4 Using ACF with Elementor Theme Builder
+
+To build dynamic site templates:
+
+1. Templates → **Theme Builder → Single**
+2. Create a template for your CPT (e.g., Projects)
+3. Insert widgets and bind fields using Dynamic Tags:
+
+   * Dynamic title
+   * Dynamic featured image or ACF image
+   * Dynamic repeater content
+   * Dynamic buttons linking to project URLs
+
+Publish conditions:
+
+* **Include → Projects → All**
+  or
+* Select specific taxonomies.
+
+This is the cornerstone of scalable Elementor + ACF development.
+
+---
+
+## 11.5 Repeater Fields in Elementor
+
+Elementor Pro includes the **Loop Builder**, enabling dynamic repeaters.
+
+### Using Repeater Fields via Loop Builder
+
+1. Templates → **Loop Item**
+2. Design an item card (image, title, fields)
+3. Bind all widgets to ACF repeater subfields
+4. Use a Loop Grid widget to display the collection
+
+Example ACF repeater:
+
+* gallery_items (Repeater)
+
+  * gallery_image (Image)
+  * gallery_caption (Text)
+
+Bind in Elementor:
+
+* Image widget → Dynamic Tag → ACF Sub Field → gallery_image
+* Text widget → Dynamic Tag → ACF Sub Field → gallery_caption
+
+Elementor will render each repeater row automatically.
+
+---
+
+## 11.6 ACF Relationship and Post Object Fields
+
+Elementor can render related posts using:
+
+* Loop Grid
+* Post widget (Pro)
+* Dynamic fields inside a template
+
+Example: ACF field “related_projects” returns array of post IDs.
+
+Process:
+
+1. Create a Loop Item template for related posts
+2. Bind post data to Dynamic Tags
+3. Use Loop Grid → Source → ACF Relationship Field
+4. Choose the ACF field name (“related_projects”)
+
+---
+
+## 11.7 ACF Flexible Content with Elementor
+
+Flexible Content is like a structured block editor inside ACF.
+
+Option 1:
+Use multiple Elementor Loop Item templates and switch based on the layout selected in ACF.
+
+Option 2:
+Use a child theme with conditional template loading:
+
+```php
+if( have_rows('flex_sections') ):
+    while( have_rows('flex_sections') ): the_row();
+        if( get_row_layout() == 'hero_section' ):
+            get_template_part('flex/hero');
+        elseif( get_row_layout() == 'gallery_section' ):
+            get_template_part('flex/gallery');
+        endif;
+    endwhile;
+endif;
+```
+
+This gives a hybrid model where Elementor handles design and PHP handles layout logic.
+
+---
+
+## 11.8 ACF Options Pages with Elementor
+
+Options pages allow global content such as:
+
+* Company information
+* Footer data
+* Header CTAs
+* Site-wide notifications
+
+ACF Pro example:
+
+```php
+if( function_exists('acf_add_options_page') ) {
+    acf_add_options_page([
+        'page_title' => 'Site Settings',
+        'menu_title' => 'Site Settings',
+        'menu_slug'  => 'site-settings'
+    ]);
+}
+```
+
+Elementor binding:
+Dynamic Tags → ACF Options → Select your global field
+
+Use this for:
+
+* Global contact details
+* Global hero content
+* Dynamic footer content
+* Company address, emails, etc.
+
+---
+
+## 11.9 ACF + Elementor Query Filters (Advanced)
+
+Elementor supports custom PHP-based query filters. This allows you to modify the Loop Grid query using ACF metadata conditions.
+
+Example: Only show posts with meta key `featured` = true.
+
+```php
+add_action('elementor/query/featured_projects', function($query) {
+    $query->set('meta_key', 'featured');
+    $query->set('meta_value', '1');
+});
+```
+
+Use in Elementor:
+Loop Grid → Query → Custom Query ID → `featured_projects`
+
+---
+
+## 11.10 Security, Performance, and Best Practices
+
+* Always sanitize ACF output with `esc_html()`, `wp_kses()`, or type restrictions.
+
+* Use lazy loading for ACF images via Elementor’s settings.
+
+* Avoid storing large datasets in single ACF fields; use CPTs instead.
+
+* Set a naming convention for fields:
+
+  * `project_title`
+  * `project_gallery_image`
+  * `company_phone`
+
+* Keep ACF JSON sync enabled for version-controlled environments (`acf-json` folder).
+
+---
+
+## 11.11 When to Use ACF vs. Elementor Native Fields
+
+Use **ACF** when:
+
+* You need structured, validated data
+* Editors require predictable fields
+* You need CPT relationships, taxonomies, or flexible content
+* You are building directory sites, catalogs, or large content systems
+
+Use **Elementor** native content when:
+
+* Data is visual and localized
+* Only one editor will manage content
+* No relational data is required
+
 ---
 
 # Conclusion
