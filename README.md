@@ -313,7 +313,6 @@ function esw_register_widgets( $widgets_manager ) {
 	if ( ! esw_check_elementor_active() ) {
 		return;
 	}
-
 	$widgets_manager->register( new \ESW_Hello_World_Widget() );
 }
 
@@ -328,105 +327,113 @@ add_action( 'elementor/widgets/register', 'esw_register_widgets' );
 
 ## Setting Global Typography and Styles
 
-Consistency is critical when working at scale.
+Elementor’s global design tools let you define consistent typography across your entire site—headings, body text, buttons, and form elements—all from one place. Using these settings properly helps maintain brand consistency, improve accessibility, and reduce the need for per-widget customization.
 
-### Where to Configure
+### Where to Configure Global Typography
 
-WordPress Admin →
-**Elementor → Site Settings**
+You can manage global typography from:
 
-Configure:
+**Elementor → Site Settings → Typography**
 
-* Global colors
-* Global typography
-* Buttons
-* Form fields
-* Images
-* Theme styles
+Here you can define:
 
-Once saved, all new widgets inherit defaults unless manually overridden.
+* **Global Fonts:** Primary, Secondary, Text, and Accent
+* **Headings:** H1–H6 font family, weight, size, line height
+* **Body text:** Font family, size, weight, line height
+* **Theme Style Overrides:** Disable theme typography if needed
+* **Custom CSS variables** (Elementor Pro)
 
----
+Once set, these values automatically apply to all widgets unless manually overridden.
 
-# 7. Setting Headers and Footers (Theme Builder)
+### Using Google Fonts in Elementor
 
-Requires Elementor Pro.
+Elementor bundles built-in access to Google Fonts. To use them:
 
-### Create a Global Header
+1. Open any widget with typography controls.
+2. Under **Style → Typography**, select the **Font Family** dropdown.
+3. Search for a Google Font (e.g., “Inter”, “Roboto”, “Poppins”).
+4. Apply weights and variations as needed.
 
-1. Templates → Theme Builder → Header
-2. Add new template
-3. Use Nav Menu + Logo widget
-4. Publish with conditions:
+### Load Only What You Use
 
-   * **Entire Site**, or
-   * Specific post types, categories, or pages
+**Elementor → Settings → Advanced → *Load Only Used Google Fonts***
 
-### Create a Global Footer
+Enabling this prevents Elementor from loading unused font weights/styles, improving performance.
 
-Same process via Theme Builder → Footer.
+### Enabling Local Google Fonts (GDPR / Privacy)
 
----
+To keep fonts self-hosted:
 
-# 8. Using Templates and Blocks (Import/Export Included)
+**Elementor → Settings → Advanced → Google Fonts → Local**
 
-### Insert Library Templates
+This downloads fonts to your server, reducing external requests and improving compliance with GDPR.
 
-Inside Elementor editor:
+### Common Typography Issues & Fixes
 
-* Template → Add Template
-* Choose from **Blocks**, **Pages**, or **My Templates**
+#### Theme Overrides Elementor Styles
 
-### Export Your Template
+Some WordPress themes apply typography styles that conflict with Elementor.
 
-Templates → Saved Templates → Export JSON
+**Fix:**
+Go to *Site Settings → Theme Style* and ensure “Default Colors” and “Default Fonts” are disabled (or adjust theme settings).
 
-### Import Template
+#### Fonts Not Loading (Google Fonts Blocked or GDPR)
 
-Templates → Import Templates → Upload JSON
+If fonts aren’t appearing:
 
-Great for sharing components across client projects or maintaining your own starter kits.
+* Confirm local font hosting is enabled.
+* Clear Elementor + Browser cache.
+* Test switching to a system font temporarily.
 
----
+#### Inconsistent Heading Sizes Across Widgets
 
-# 9. Using Custom CSS and JavaScript
+Widgets may override global typography due to:
 
-### Elementor Pro
+* Manual widget-level typography settings
+* Imported templates with embedded styles
 
-Per-widget CSS is available under:
-Advanced → Custom CSS
+**Fix:** Right-click a widget → **Reset Style**, or manually set typography to “Default”.
 
-### Site-wide CSS/JS
+#### CLS (Cumulative Layout Shift) from Web Fonts
 
-Use:
+Slow-loading fonts cause text to jump on page load.
 
-```php
-function me_enqueue_scripts() {
-    wp_enqueue_style('me-custom', get_stylesheet_directory_uri() . '/custom.css');
-    wp_enqueue_script('me-custom-js', get_stylesheet_directory_uri() . '/custom.js', [], null, true);
+**Fixes:**
+
+* Use “swap” font-display (enabled automatically for local fonts).
+* Reduce number of font weights.
+* Choose system fonts where possible.
+
+### Applying Typography via Custom CSS Variables (Pro)
+
+```css
+/* Example: Use global variables from Site Settings */
+h1 {
+  font-family: var(--e-global-typography-primary-font-family);
+  font-size: var(--e-global-typography-primary-font-size);
 }
-add_action('wp_enqueue_scripts', 'me_enqueue_scripts');
 ```
 
-Place inside `functions.php` of your child theme.
+- Elementor Site Settings: [https://elementor.com/help/site-settings/](https://elementor.com/help/site-settings/)
+- Typography Basics in Elementor: [https://elementor.com/help/typography/](https://elementor.com/help/typography/)
+- Google Fonts Documentation: [https://fonts.google.com/](https://fonts.google.com/)
+- Elementor Performance Settings: [https://elementor.com/help/performance/](https://elementor.com/help/performance/)
 
 ---
 
-# 10. Text Animations (Typing Effects, Transitions, Scroll Animations)
+## Text Animations (Typing Effects, Transitions, Scroll Animations)
 
 Elementor Pro includes motion effects:
 
-* Entrance animations
-* Scrolling effects (parallax, rotate, opacity)
-* Mouse-track animations
-* Transformations (scale, rotate, skew)
+- Entrance animations
+- Scrolling effects (parallax, rotate, opacity)
+- Mouse-track animations
+- Transformations (scale, rotate, skew)
 
 For typing animations, use:
 
-* Elementor’s built-in "Animated Headline" widget, or
-* Custom JS such as Typed.js when finer control is needed.
-
-Example:
+- Elementor’s built-in "Animated Headline" widget, or
+- Custom JS such as Typed.js when finer control is needed.
 
 ```javascript
 var typed = new Typed('.typed-text', {
@@ -437,7 +444,10 @@ var typed = new Typed('.typed-text', {
 });
 ```
 
-# 11. Integrating Elementor with ACF (Advanced Custom Fields)
+
+
+
+## Integrating Elementor with ACF (Advanced Custom Fields)
 
 Elementor Pro pairs exceptionally well with **Advanced Custom Fields**, enabling fully dynamic, client-friendly, and scalable WordPress builds. This combination allows you to convert WordPress into a true CMS with structured data, reusable templates, and automated content layouts.
 
