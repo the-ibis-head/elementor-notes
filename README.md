@@ -421,28 +421,181 @@ h1 {
 
 ---
 
-## Text Animations (Typing Effects, Transitions, Scroll Animations)
+## Text Animations & Scroll Effects + GSAP Video Scroll
 
-Elementor Pro includes motion effects:
+You can add text animations — typing effects, transitions and scroll-triggered text inside Elementor, and use GSAP for more advanced effects.
 
-- Entrance animations
-- Scrolling effects (parallax, rotate, opacity)
-- Mouse-track animations
-- Transformations (scale, rotate, skew)
+### Typing Effects
 
-For typing animations, use:
+In Elementor (free or Pro) you can simulate typing text via a few strategies:
 
-- Elementor’s built-in "Animated Headline" widget, or
-- Custom JS such as Typed.js when finer control is needed.
+Use the **Heading / Text Editor widget** and animate it via entrance animations (fade, typewriter) — some themes/widgets support a “typewriter” effect out of the box (Elementor Pro has a *Text Rotator* or *Animated Headline* widget)
 
-```javascript
-var typed = new Typed('.typed-text', {
-  strings: ["Mastering Elementor", "Building Modern Websites"],
-  typeSpeed: 50,
-  backSpeed: 25,
-  loop: true
+In the Free version create a custom typing CSS class and keyframes, then apply this class via the Advanced → CSS Classes field.
+
+  ```css
+  .typing {
+    overflow: hidden;
+    white-space: nowrap;
+    animation: typing 3s steps(30, end), blink-caret .5s step-end infinite;
+  }
+  @keyframes typing {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  @keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: black; }
+  }
+  ```
+
+### Transitions & Entrance Animations
+
+Elementor widgets support entrance animations (fade in, slide in, zoom, etc) and hover/transitions:
+
+- Choose a widget, go to Advanced → Motion Effects → Entrance Animation.
+- Use the built-in transitions and delay/stagger options.
+- For more control (e.g., split text, letter by letter) you can use the *Animated Headline* (Pro) or add custom JS + GSAP.
+  
+
+### Scroll Animations for Text
+
+To animate text on scroll (as the user scrolls the page), Elementor Pro offers **Motion Effects → Scrolling Effects** (vertical/horizontal scroll, transparency, rotate, scale) and **Sticky Effects**.
+
+In the free version, you're more limited: you can use CSS (position: sticky, transform on scroll with IntersectionObserver) or embed custom code. But for more advanced control (like synchronising text with scroll progress, or pinning sections while animating), GSAP becomes the tool of choice.
+
+### What is GSAP and How It Works
+
+The GreenSock Animation Platform (GSAP) is a high-performance JavaScript animation library for the web. It allows you to animate DOM elements or canvases with much more control and performance than typical CSS transitions.
+
+- Elementor gives you UI for typical animations, but GSAP gives next-level: scroll-scrubbed animations, synchronized timelines, video scrubbing, sequence animations, pinned sections.
+- You can embed GSAP code in Elementor via HTML widgets, custom JS, or theme/child theme files.
+- Works whether you’re on the free or Pro version — the difference is mostly how much UI support Elementor provides, not whether GSAP works.
+
+#### Key Concepts
+
+- **Tween**: Animate one property (e.g., `gsap.to(".box", { x:100, duration:1 })`).
+- **Timeline**: Sequence or group tweens (`gsap.timeline()`), enabling complex choreographies.
+- **Plugins**: For scroll-based control, GSAP offers `ScrollTrigger`, `ScrollSmoother`, etc.
+- **Registration**: You must register plugins:
+
+```js
+gsap.registerPlugin(ScrollTrigger);
+```
+
+#### How It Works Under the Hood
+
+- You target elements (DOM, canvas) and animate numeric properties over time (or linked to scroll).
+- With `ScrollTrigger`, you can **scrub** an animation along with the scrollbar, **pin** sections (freeze while animating), **trigger** when elements enter/exit viewport. 
+- Performance optimisations: WebGL/canvas or hardware-accelerated transforms; GSAP takes care of debounce, throttling, etc.
+
+### Implementing a Video Scroll Animation with GSAP in Elementor
+
+Here’s a step-by-step guide that works for both free and Pro Elementor versions.
+
+#### Step 1: Prepare your HTML structure (Elementor)
+
+Add an **HTML widget** (or use Theme/Child theme file) where you want your scroll animation.
+
+```html
+<!-- Elementor HTML widget -->
+<div class="video-scroll-container">
+  <video class="scrollVideo" src="/videos/exploding-watermelon.mp4" muted playsinline></video>
+</div>
+<div class="scrollSpacer" style="height: 300vh;"></div>
+
+<!-- Set height so the video can scrub while container is pinned -->
+<div class="scrollSpacer" style="height: 300vh;"></div>
+```
+
+In your Elementor widget’s Advanced → Custom CSS/Classes, add classes like `video‐scroll‐container`.
+
+#### Step 2: Style with CSS
+
+```css
+.video-scroll-container {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.scrollVideo {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: auto;
+}
+```
+
+#### Step 3: Load GSAP + ScrollTrigger
+
+In your theme or via an Elementor HTML widget add:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+```
+
+Then in a `<script>` tag:
+
+```js
+gsap.registerPlugin(ScrollTrigger);
+
+const video = document.querySelector(".scrollVideo");
+
+gsap.to(video, {
+  currentTime: video.duration,    // animate from 0 to end
+  ease: "none",
+  scrollTrigger: {
+    trigger: ".video-scroll-container",
+    start: "top top",
+    end: "bottom top",
+    scrub: true,
+    pin: true,
+    anticipatePin: 1
+  }
 });
 ```
+
+#### Step 4: Handle video loading & duration
+
+Because we animate `currentTime`, ensure the video metadata is loaded before animating:
+
+```js
+video.addEventListener("loadedmetadata", function() {
+  // Now video.duration is valid
+  gsap.to(video, {
+    currentTime: video.duration,
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".video-scroll-container",
+      start: "top top",
+      end: () => "+=" + (video.duration * 100), // adjust scroll length
+      scrub: true,
+      pin: true
+    }
+  });
+});
+```
+
+#### Optimise & test
+
+- Use a short video, compressed and encoded for web (`libx264`, `‐crf 20`, `‐movflags faststart`) as described in the GSAP community. ([GSAP][3])
+- Test on mobile — you may choose fallback (static image) for slow devices.
+- Preload or hide until ready.
+
+#### Tips & Considerations
+
+- Use a **muted**, **playsinline**, **autoplay** if desired — but for scroll-controlled maybe no autoplay, you scrub manually.
+- Ensure the video codec is friendly for scrubbing (lots of keyframes). See GSAP forum discussion about encoding. ([GSAP][3])
+- Consider fallback: For devices that don’t support video scrubbing smoothly, show a static image or simplified animation.
+- Performance matters: Large video files + high resolution can cause jank.
+- Combine text animations + scroll: While your video scrolls, you can overlay text via Elementor (with GSAP or Elementor’s Motion Effects) to reinforce storytelling.
+
+- Watermelon explosion. Super slow motion animation: [https://www.shutterstock.com/video/clip-1053384449-watermelon-explosion-super-slow-motion-animation](https://www.shutterstock.com/video/clip-1053384449-watermelon-explosion-super-slow-motion-animation)
+- ScrollTrigger | GSAP: [https://gsap.com/docs/v3/Plugins/ScrollTrigger/](https://gsap.com/docs/v3/Plugins/ScrollTrigger/)
+- Video Scroll Animation - GSAP - GreenSock [https://gsap.com/community/forums/topic/32782-video-scroll-animation/](https://gsap.com/community/forums/topic/32782-video-scroll-animation/)
+
 
 
 
