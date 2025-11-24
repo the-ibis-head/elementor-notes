@@ -7,9 +7,9 @@ This guide delivers a clear, technical path to mastering Elementor.
 
 ---
 
-### Local Setup with Valet, WP-CLI & Astra/Elementor
+## Local Setup with Valet, WP-CLI & Astra/Elementor
 
-#### 1. Install Prereqs (macOS)
+### 1. Install prerequisites (macOS)
 
 ```bash
 # Homebrew
@@ -20,16 +20,16 @@ brew install php mysql mailpit wp-cli composer
 brew services start mysql
 ```
 
-Homebrew: [https://brew.sh](https://brew.sh)
-PHP: [https://formulae.brew.sh/formula/php](https://formulae.brew.sh/formula/php)
-MySQL: [https://formulae.brew.sh/formula/mysql](https://formulae.brew.sh/formula/mysql)
-Mailpit: [https://github.com/axllent/mailpit](https://github.com/axllent/mailpit)
-WP-CLI: [https://wp-cli.org](https://wp-cli.org)
-Composer: [https://getcomposer.org](https://getcomposer.org)
+- Homebrew: [https://brew.sh](https://brew.sh)
+- PHP: [https://formulae.brew.sh/formula/php](https://formulae.brew.sh/formula/php)
+- MySQL: [https://formulae.brew.sh/formula/mysql](https://formulae.brew.sh/formula/mysql)
+- Mailpit: [https://github.com/axllent/mailpit](https://github.com/axllent/mailpit)
+- WP-CLI: [https://wp-cli.org](https://wp-cli.org)
+- Composer: [https://getcomposer.org](https://getcomposer.org)
 
 ---
 
-#### 2. Install & Configure Laravel Valet
+### 2. Install & Configure Laravel Valet
 
 ```bash
 composer global require laravel/valet
@@ -40,11 +40,9 @@ mkdir -p ~/Sites && cd ~/Sites
 valet park
 ```
 
-Laravel Valet: [https://laravel.com/docs/valet](https://laravel.com/docs/valet)
+- Laravel Valet: [https://laravel.com/docs/valet](https://laravel.com/docs/valet)
 
----
-
-#### 3. Create a New WordPress Site
+### 3. Create a New WordPress Site
 
 ```bash
 cd ~/Sites
@@ -56,12 +54,9 @@ mkdir $SITE && cd $SITE
 valet link $SITE
 
 wp core download
-
 wp config create \
   --dbname=$DB --dbuser=root --dbpass="" --dbhost=127.0.0.1
-
 wp db create
-
 wp core install \
   --url="$URL" \
   --title="Elementor Dev Site" \
@@ -70,13 +65,11 @@ wp core install \
   --admin_email=you@example.com
 ```
 
-WordPress: [https://wordpress.org/download](https://wordpress.org/download)
-Valet Link: [https://laravel.com/docs/valet#the-link-command](https://laravel.com/docs/valet#the-link-command)
-WP-CLI Core: [https://developer.wordpress.org/cli/commands/core](https://developer.wordpress.org/cli/commands/core)
+- WordPress: [https://wordpress.org/download](https://wordpress.org/download)
+- Valet Link: [https://laravel.com/docs/valet#the-link-command](https://laravel.com/docs/valet#the-link-command)
+- WP-CLI Core: [https://developer.wordpress.org/cli/commands/core](https://developer.wordpress.org/cli/commands/core)
 
----
-
-#### 4. Create / Reset the Database & Site
+### 4. Create / Reset the Database & Site
 
 ```bash
 # Create DB (if missing)
@@ -95,40 +88,36 @@ wp core install \
 wp site empty --yes
 ```
 
-WP-CLI DB: [https://developer.wordpress.org/cli/commands/db](https://developer.wordpress.org/cli/commands/db)
-WP-CLI Site Empty: [https://developer.wordpress.org/cli/commands/site/empty](https://developer.wordpress.org/cli/commands/site/empty)
+- WP-CLI DB: [https://developer.wordpress.org/cli/commands/db](https://developer.wordpress.org/cli/commands/db)
+- WP-CLI Site Empty: [https://developer.wordpress.org/cli/commands/site/empty](https://developer.wordpress.org/cli/commands/site/empty)
 
----
-
-#### 5. Install Astra & Elementor
+### 5. Install Astra & Elementor
 
 ```bash
 wp theme install astra --activate
 wp plugin install elementor --activate
+
+# Elementor Pro
 # wp plugin install /path/to/elementor-pro.zip --activate
 ```
 
-Astra Theme: [https://wpastra.com](https://wpastra.com)
-Elementor: [https://elementor.com](https://elementor.com)
-WP-CLI Theme: [https://developer.wordpress.org/cli/commands/theme](https://developer.wordpress.org/cli/commands/theme)
-WP-CLI Plugin: [https://developer.wordpress.org/cli/commands/plugin](https://developer.wordpress.org/cli/commands/plugin)
+- Astra Theme: [https://wpastra.com](https://wpastra.com)
+- Elementor: [https://elementor.com](https://elementor.com)
+- WP-CLI Theme: [https://developer.wordpress.org/cli/commands/theme](https://developer.wordpress.org/cli/commands/theme)
+- WP-CLI Plugin: [https://developer.wordpress.org/cli/commands/plugin](https://developer.wordpress.org/cli/commands/plugin)
 
----
-
-#### 6. Mailpit for Email Testing
+### 6. Mailpit for Email Testing
 
 ```bash
 mailpit
 ```
 
-Mailpit Docs: [https://github.com/axllent/mailpit](https://github.com/axllent/mailpit)
+- Mailpit Docs: [https://github.com/axllent/mailpit](https://github.com/axllent/mailpit)
 
-SMTP: `127.0.0.1:1025`
-UI: `http://localhost:8025`
+- SMTP: `127.0.0.1:1025`
+- UI: [localhost:8025](http://localhost:8025)
 
----
-
-# 2. Free vs Pro: What You Should Actually Use
+## 2. Free vs Pro: What You Should Actually Use
 
 Both versions of Elementor are strong, but the **Pro** version unlocks workflow efficiencies that matter for production environments.
 
@@ -148,7 +137,7 @@ If you're building more than two commercial sites per year or using CPT/ACF, Ele
 
 ---
 
-# 3. Rolling Back Elementor Versions
+## 3. Rolling Back Elementor Versions
 
 Elementor provides version control inside WordPress. This is invaluable when troubleshooting plugin conflicts or regressions.
 
