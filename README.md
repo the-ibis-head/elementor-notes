@@ -160,8 +160,8 @@ Elementor Pro unlocks full site-building power and advanced marketing features. 
 | Smooth Workflow for Client Sites | Basic          | Advanced                            |
 | Best Use Case                    | Simple sites   | Production-ready, scalable websites |
 
-- [https://elementor.com/features/editor/](https://elementor.com/features/editor/)
-- [https://elementor.com/pro/](https://elementor.com/pro/)
+- Free Plugin [https://elementor.com/products/page-builder-plugin/](https://elementor.com/products/page-builder-plugin/)
+- Pro Features [https://elementor.com/pro/](https://elementor.com/pro/)
 
 ---
 
