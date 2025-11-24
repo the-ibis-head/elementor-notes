@@ -492,6 +492,10 @@ gsap.registerPlugin(ScrollTrigger);
 
 Here’s a step-by-step guide that works for both free and Pro Elementor versions.
 
+- ScrollTrigger | GSAP: [https://gsap.com/docs/v3/Plugins/ScrollTrigger/](https://gsap.com/docs/v3/Plugins/ScrollTrigger/)
+- Video Scroll Animation - GSAP - GreenSock [https://gsap.com/community/forums/topic/32782-video-scroll-animation/](https://gsap.com/community/forums/topic/32782-video-scroll-animation/)
+- Watermelon explosion. Super slow motion animation: [https://www.shutterstock.com/video/clip-1053384449-watermelon-explosion-super-slow-motion-animation]
+
 #### <ins>Step 1: Prepare your HTML structure (Elementor)</ins>
 
 Add an **HTML widget** (or use Theme/Child theme file) where you want your scroll animation.
@@ -577,13 +581,13 @@ video.addEventListener("loadedmetadata", function() {
 });
 ```
 
-#### Optimise & test
+#### <ins>Optimise & test</ins>
 
 - Use a short video, compressed and encoded for web (`libx264`, `‐crf 20`, `‐movflags faststart`) as described in the GSAP community.
 - Test on mobile — you may choose fallback (static image) for slow devices.
 - Preload or hide until ready.
 
-#### Tips & Considerations
+#### <ins>Tips & Considerations</ins>
 
 - Use a **muted**, **playsinline**, **autoplay** if desired — but for scroll-controlled maybe no autoplay, you scrub manually.
 - Ensure the video codec is friendly for scrubbing (lots of keyframes). See GSAP forum discussion about encoding.
@@ -591,9 +595,6 @@ video.addEventListener("loadedmetadata", function() {
 - Performance matters: Large video files + high resolution can cause jank.
 - Combine text animations + scroll: While your video scrolls, you can overlay text via Elementor (with GSAP or Elementor’s Motion Effects) to reinforce storytelling.
 
-- ScrollTrigger | GSAP: [https://gsap.com/docs/v3/Plugins/ScrollTrigger/](https://gsap.com/docs/v3/Plugins/ScrollTrigger/)
-- Video Scroll Animation - GSAP - GreenSock [https://gsap.com/community/forums/topic/32782-video-scroll-animation/](https://gsap.com/community/forums/topic/32782-video-scroll-animation/)
-- Watermelon explosion. Super slow motion animation: [https://www.shutterstock.com/video/clip-1053384449-watermelon-explosion-super-slow-motion-animation]
 
 
 
