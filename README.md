@@ -597,8 +597,6 @@ video.addEventListener("loadedmetadata", function() {
 
 ---
 
-
-
 ## Integrating Google Maps With Elementor
 
 Elementor makes it simple to embed a Google Map, but adding **API keys**, **advanced map settings**, and **custom markers** requires a bit of setup.
@@ -700,7 +698,6 @@ To add **multiple markers**, simply loop through a list:
 
 - [https://developers.google.com/maps/documentation/javascript/custom-markers](https://developers.google.com/maps/documentation/javascript/custom-markers)**
 
-
 ### Using Custom Map Styles (Dark Mode, Minimal, etc.)
 
 You can apply custom map themes by using the **SnazzyMaps** plugin and pasting the style JSON into the map:
@@ -736,41 +733,6 @@ This gives you consistent styling and faster site-building.
 | Map crashes in Elementor preview          | Try viewing from front-end or disable conflicting plugins |
 
 ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 ## Integrating Google Analytics With Elementor
 
@@ -900,6 +862,137 @@ Elementor embeds videos using iframe players, so tracking requires GTM or the Yo
    * Parameters: `video_title` → `{{Video Title}}`, `percent` → `{{Video Percent}}`
 
 Works even for videos placed inside Elementor widgets, popups, tabs, or sliders.
+
+---
+
+## Integrating Typeform with Elementor
+
+Embedding a Typeform inside Elementor is one of the quickest ways to add high-conversion forms, quizzes, surveys, or lead-gen flows to your WordPress pages. Typeform handles the form logic and design, while Elementor gives you full control over layout and styling around it.
+
+### Generate Your Typeform Embed Code
+
+1. Log into **Typeform** → open your form.
+2. Go to **Share → Embed in a Web Page**.
+3. Choose your preferred embed style:
+
+   * **Standard** (inline iframe)
+   * **Popup** (button or link trigger)
+   * **Slider**
+   * **Popover**
+    
+4. Click **Get the code** and copy the HTML/JavaScript snippet.
+
+- [https://www.typeform.com/help/a/embed-your-typeform-360029581131/](https://www.typeform.com/help/a/embed-your-typeform-360029581131/)
+
+### Add the Typeform to Elementor (Inline Embed)
+
+If you want the form to appear directly on the page:
+
+1. Edit your page with **Elementor**.
+2. Drag in an **HTML widget**.
+3. Paste the Typeform embed snippet.
+
+```html
+<div style="width:100%;height:500px;">
+  <iframe
+    src="https://form.typeform.com/to/abcd1234"
+    style="width:100%;height:100%;border:none;"
+    allow="camera; microphone; autoplay; encrypted-media;"
+  ></iframe>
+</div>
+```
+
+- [https://developers.typeform.com/embed/](https://developers.typeform.com/embed/)
+
+### Add a Popup Typeform (Button or Link Trigger)
+
+Popup embeds are great for keeping pages clean while still capturing leads.
+
+1. In Typeform → **Share → Popup** → choose Button or Link.
+2. Copy the embed JS snippet.
+3. In Elementor:
+
+   * Add an **HTML widget** at the bottom of the page or in a global footer.
+   * Paste the entire embed script.
+     
+4. Add a regular **Button widget**.
+5. Set the button’s **Link** to the Typeform's trigger class (usually something like `.typeform-share`).
+
+
+```html
+<a class="typeform-share" href="https://form.typeform.com/to/abcd1234" data-mode="popup">
+  Open Survey
+</a>
+<script>
+  (function() {
+    var d = document,
+    gi = d.getElementById,
+    ce = d.createElement,
+    gt = d.getElementsByTagName,
+    id = "typef_orm",
+    b = "https://embed.typeform.com/";
+    if (!gi.call(d, id)) {
+      var js = ce.call(d, "script");
+      js.id = id;
+      js.src = b + "embed.js";
+      var q = gt.call(d, "script")[0];
+      q.parentNode.insertBefore(js, q);
+    }
+  })();
+</script>
+```
+
+- [https://developer.typeform.com/embed/modes/#popup](https://developer.typeform.com/embed/modes/#popup)
+
+### Adjusting Width, Height & Responsiveness
+
+Typeform’s iframe is fully responsive, but you may want customized sizing depending on your layout.
+To make the embed full-height inside a section:
+
+1. Set the **Column** or **Section** height to *Min Height* in Elementor.
+2. Set **min-height: 100vh** or any custom height.
+3. Ensure your iframe includes `height:100%`.
+
+### Styling Surrounding Elements in Elementor
+
+Typeform’s embed itself can’t be styled directly from Elementor, but everything around it can:
+
+* Add padding/margins around the HTML widget
+* Wrap the form in a **Container** with background colors/images
+* Add headings, icons, progress bars, CTAs
+* Add animations (scroll, fade-in) to the section or container
+
+If you need more visual control, use the **Standard embed** (iframe) and give it a wrapper div to style.
+
+### Tracking Typeform Conversions with GA4 or GTM
+
+Typeform supports event callbacks (via Embed SDK) and also sends built-in completion events.
+
+**Quick tracking method using GTM:**
+
+```javascript
+window.addEventListener("message", function(event) {
+  if (event.data.type === "form-submit") {
+    dataLayer.push({ event: "typeform_submission" });
+  }
+});
+```
+
+Add this inside the same HTML widget that loads the Typeform.
+
+- [https://developer.typeform.com/embed/usage/#event-tracking](https://developer.typeform.com/embed/usage/#event-tracking)
+
+### Troubleshooting
+
+**Form not loading?**
+
+* Make sure no caching plugin is delaying or stripping Typeform scripts.
+* Disable “Optimize JS” or defer settings temporarily.
+
+**Popup not opening?**
+
+* You must include the Typeform embed JS code somewhere on the page.
+* If using multiple popups, ensure each trigger has the correct `data-mode`.
 
 ---
 
