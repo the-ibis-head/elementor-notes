@@ -597,6 +597,126 @@ video.addEventListener("loadedmetadata", function() {
 
 ---
 
+## Integrating WooCommerce with Elementor
+
+Elementor works seamlessly with WooCommerce, allowing you to design product pages, archive layouts, and checkout flows using a visual builder instead of relying on theme defaults. 
+
+### Using Elementor to Design WooCommerce Product Pages
+
+Elementor Pro gives you access to dynamic WooCommerce widgets and lets you build fully custom product templates.
+
+**Steps:**
+
+1. Go to **Templates → Theme Builder → Single Product**.
+2. Choose **Add New** → *Single Product*.
+3. Insert WooCommerce widgets such as:
+
+   * Product Title
+   * Product Price
+   * Product Image
+   * Product Rating
+   * Add to Cart
+   * Product Meta
+   * Product Data Tabs
+     
+4. Publish and assign the template to **All Products** or a specific product/category.
+
+### Styling or Replacing the Quantity Input**
+
+Many stores want a cleaner or custom-styled quantity field.
+
+#### <ins>Style via Elementor Custom CSS (Pro)</ins>
+
+Add to the **Add to Cart** widget → *Advanced → Custom CSS*:
+
+```css
+.woocommerce .quantity input.qty {
+  width: 70px;
+  padding: 8px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  font-size: 16px;
+}
+```
+
+- [WooCommerce Quantity Docs](https://woocommerce.com/document/template-structure/)
+
+### Editing WooCommerce Product Description Tabs
+
+You can visually style the **Product Data Tabs** widget in Elementor, but if you want to rename or remove tabs:
+
+#### <ins>Rename Tabs</ins>
+
+```php
+add_filter( 'woocommerce_product_tabs', function( $tabs ) {
+    $tabs['description']['title'] = 'Details';
+    $tabs['additional_information']['title'] = 'Specs';
+    return $tabs;
+});
+```
+
+#### <ins>Remove Tabs</ins>
+
+```php
+add_filter( 'woocommerce_product_tabs', function( $tabs ) {
+    unset( $tabs['reviews'] ); // hides Reviews tab
+    return $tabs;
+});
+```
+
+- [WooCommerce Tabs Filter](https://woocommerce.com/document/editing-product-data-tabs/)
+
+### Enabling PayPal Payments in WooCommerce
+
+WooCommerce supports PayPal via the official **“WooCommerce PayPal Payments”** plugin.
+
+**Install the plugin:**
+
+1. Go to **Plugins → Add New**.
+2. Search **WooCommerce PayPal Payments**.
+3. Install & activate.
+4. Open **WooCommerce → Settings → Payments → PayPal**.
+
+- [PayPal Payments Plugin](https://woocommerce.com/products/woocommerce-paypal-payments/)
+
+### Setting Up PayPal Sandbox Mode for Testing
+
+Sandbox mode lets you test transactions without real money.
+
+#### <ins>Steps to Create PayPal Sandbox Accounts</ins>
+
+1. Visit: [https://developer.paypal.com](https://developer.paypal.com)
+2. Log in with your PayPal account.
+3. Go to **Dashboard → Sandbox → Accounts**.
+4. Create:
+
+   * **Business account** (merchant)
+   * **Personal account** (buyer)
+
+#### **Configure Sandbox in WooCommerce**
+
+Inside **WooCommerce → Settings → Payments → PayPal**:
+
+1. Toggle **Enable Sandbox**.
+2. Enter your **Sandbox API Credentials**:
+
+   * Sandbox Client ID
+   * Sandbox Secret
+     
+3. Save changes.
+4. Test a checkout using your **sandbox personal account** email/password.
+
+- [PayPal Sandbox Setup Guide](https://developer.paypal.com/tools/sandbox/)
+
+
+
+
+
+
+
+
+---
+
 ## Integrating Google Maps With Elementor
 
 Elementor makes it simple to embed a Google Map, but adding **API keys**, **advanced map settings**, and **custom markers** requires a bit of setup.
