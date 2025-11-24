@@ -9,7 +9,7 @@ This guide delivers a clear, technical path to mastering Elementor.
 
 ## Local Setup with Valet, WP-CLI & Astra/Elementor
 
-### 1. Install prerequisites (macOS)
+### Install prerequisites (macOS)
 
 ```bash
 # Homebrew
@@ -29,7 +29,7 @@ brew services start mysql
 
 ---
 
-### 2. Install & Configure Laravel Valet
+### Install & Configure Laravel Valet
 
 ```bash
 composer global require laravel/valet
@@ -42,7 +42,7 @@ valet park
 
 - Laravel Valet: [https://laravel.com/docs/valet](https://laravel.com/docs/valet)
 
-### 3. Create a New WordPress Site
+### Create a New WordPress Site
 
 ```bash
 cd ~/Sites
@@ -69,7 +69,7 @@ wp core install \
 - Valet Link: [https://laravel.com/docs/valet#the-link-command](https://laravel.com/docs/valet#the-link-command)
 - WP-CLI Core: [https://developer.wordpress.org/cli/commands/core](https://developer.wordpress.org/cli/commands/core)
 
-### 4. Create / Reset the Database & Site
+### Create / Reset the Database & Site
 
 ```bash
 # Create DB (if missing)
@@ -91,7 +91,7 @@ wp site empty --yes
 - WP-CLI DB: [https://developer.wordpress.org/cli/commands/db](https://developer.wordpress.org/cli/commands/db)
 - WP-CLI Site Empty: [https://developer.wordpress.org/cli/commands/site/empty](https://developer.wordpress.org/cli/commands/site/empty)
 
-### 5. Install Astra & Elementor
+### Install Astra & Elementor
 
 ```bash
 wp theme install astra --activate
@@ -106,37 +106,66 @@ wp plugin install elementor --activate
 - WP-CLI Theme: [https://developer.wordpress.org/cli/commands/theme](https://developer.wordpress.org/cli/commands/theme)
 - WP-CLI Plugin: [https://developer.wordpress.org/cli/commands/plugin](https://developer.wordpress.org/cli/commands/plugin)
 
-### 6. Mailpit for Email Testing
+### Mailpit for Email Testing
 
 ```bash
 mailpit
 ```
 
 - Mailpit Docs: [https://github.com/axllent/mailpit](https://github.com/axllent/mailpit)
-- SMTP: `127.0.0.1:1025`
-- UI: [localhost:8025](http://localhost:8025)
-
-## 2. Free vs Pro: What You Should Actually Use
-
-Both versions of Elementor are strong, but the **Pro** version unlocks workflow efficiencies that matter for production environments.
-
-| Feature                                      | Free    | Pro  |
-| -------------------------------------------- | ------- | ---- |
-| Drag-and-drop page builder                   | Yes     | Yes  |
-| Theme Builder (Header, Footer, Archive, 404) | No      | Yes  |
-| Dynamic Fields / ACF / CPT Support           | No      | Yes  |
-| Popup Builder                                | No      | Yes  |
-| WooCommerce Builder                          | Limited | Full |
-| Advanced widgets (Forms, Posts, Nav Menu)    | No      | Yes  |
-| Custom CSS per element                       | Basic   | Full |
-| Motion effects, scroll effects               | Basic   | Full |
-
-Recommendation:
-If you're building more than two commercial sites per year or using CPT/ACF, Elementor Pro pays for itself immediately.
+- Mailpit SMTP Access: `127.0.0.1:1025`
+- Mailpit UI: [localhost:8025](http://localhost:8025)
 
 ---
 
-## 3. Rolling Back Elementor Versions
+## Free vs Pro: What You Should Actually Use
+
+When choosing between **Elementor Free** and **Elementor Pro**, it helps to understand how each version affects your workflow, design flexibility, and site-building capabilities.
+
+### Elementor Free
+
+Elementor Free is ideal for quick builds, small personal sites, or anyone new to visual page builders. It includes:
+
+* Drag-and-drop editor with responsive controls
+* 40+ basic widgets (Headings, Text, Images, Buttons, etc.)
+* Basic templates and blocks
+* Global fonts and colors
+* Mobile editing
+* Flexbox Container support
+
+### Elementor Pro
+
+Elementor Pro unlocks full site-building power and advanced marketing features. It includes:
+
+* Theme Builder (custom headers, footers, single posts, archives, 404 pages)
+* 90+ Pro widgets, including Forms, Slides, Nav Menu, Posts, Loop Builder, and more
+* Popup Builder (modals, exit-intent, banners)
+* WooCommerce Builder (product templates, shop archives, cart/checkout)
+* Advanced Motion Effects (scroll and mouse-based animations)
+* Dynamic content integration (ACF, Pods, Meta Box, Toolset)
+* Premium templates and kits
+
+| Feature Category                 | Elementor Free | Elementor Pro                       |
+| -------------------------------- | -------------- | ----------------------------------- |
+| Page Builder                     | Yes            | Yes                                 |
+| Basic Widgets                    | 40+            | 40+                                 |
+| Pro Widgets                      | No             | 90+                                 |
+| Theme Builder                    | No             | Yes                                 |
+| Popup Builder                    | No             | Yes                                 |
+| WooCommerce Builder              | No             | Yes                                 |
+| Loop Builder                     | No             | Yes                                 |
+| Forms Widget                     | No             | Yes                                 |
+| Dynamic Content                  | No             | Yes                                 |
+| Premium Templates                | Limited        | Full Library                        |
+| Smooth Workflow for Client Sites | Basic          | Advanced                            |
+| Best Use Case                    | Simple sites   | Production-ready, scalable websites |
+
+- [https://elementor.com/features/editor/](https://elementor.com/features/editor/)
+- [https://elementor.com/pro/](https://elementor.com/pro/)
+
+---
+
+## Rolling Back Elementor Versions
 
 Elementor provides version control inside WordPress. This is invaluable when troubleshooting plugin conflicts or regressions.
 
