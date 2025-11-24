@@ -195,7 +195,7 @@ wp plugin install elementor-pro --version=3.18.1 --force
 
 ---
 
-# 4. Keyboard Shortcuts for Power Users
+## Keyboard Shortcuts for Power Users
 
 | Action                   | Shortcut             |
 | ------------------------ | -------------------- |
@@ -207,26 +207,126 @@ wp plugin install elementor-pro --version=3.18.1 --force
 | Save                     | Cmd/Ctrl + S         |
 | Responsive Mode          | Cmd/Ctrl + Shift + M |
 
-Full list:
-[https://elementor.com/help/keyboard-shortcuts](https://elementor.com/help/keyboard-shortcuts)
+- [https://elementor.com/help/keyboard-shortcuts](https://elementor.com/help/keyboard-shortcuts)
 
 ---
 
-# 5. Adding and Managing Favorite Widgets
+## Adding and Managing Favorite Widgets in Elementor
 
-Elementor allows pinning frequently used widgets to speed up workflow.
+Elementor’s **Favorite Widgets** feature helps you speed up page-building by pinning the widgets you use most often. This keeps your workflow focused and your panel uncluttered—especially helpful for large sites or when juggling many widget types.
 
-Steps:
+### How to Add Widgets to Favorites
 
-1. Open Elementor editor
-2. Hover any widget → Right-click
-3. Choose **Add to Favorites**
+1. Open any page with the **Elementor Editor**.
+2. In the widget panel, **right-click** the widget you want to favorite.
+3. Click ***Add to Favorites***.
+4. The widget now appears in the **Favorites** category at the top of the panel.
 
-This creates a “Favorites” tab for fast access.
+### Popular Widgets to Add to Favorites
+
+A good rule of thumb: favorite anything you touch on *almost every build*—usually headings, text, buttons, images, and your main content/grid widgets.
+
+* **Heading** – For page titles, section headings, and hero text.
+* **Text Editor** – Body copy, descriptions, and simple rich text.
+* **Image** – Hero images, product photos, and feature graphics.
+* **Button** – Primary/secondary calls-to-action, links to forms or key pages.
+* **Icon / Icon List** – Bullet lists with icons for features, benefits, or steps.
+* **Divider / Spacer** – Quick visual separation and spacing (especially handy when refining layouts).
+* **Image Gallery / Image Carousel** – For portfolios, product grids, and image sliders.
+* **Video** – Embedded YouTube/Vimeo videos with customizable controls.
+
+### Sync Favorites Between Sites?
+
+Right now, Elementor **does not provide a native way to sync the Favorites list across different sites** (or even across a multisite network). Favorites are stored per site/editor environment.
+
+### Creating a Simple Custom Elementor Widget
+
+Below is a **minimal “Hello World”–style custom widget** as a standalone plugin. It registers a simple widget that just outputs some text. This follows Elementor’s recommended pattern of extending `\Elementor\Widget_Base` and registering via an addon.
+
+Create a new file in `wp-content/plugins/` called `elementor-simple-widget.php`:
+
+```php
+<?php
+/**
+ * Plugin Name: Elementor Simple Widget
+ * Description: A minimal custom widget example for Elementor.
+ * Author: ThothProcess
+ * Version: 1.0.0
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+// Make sure Elementor is active.
+function esw_check_elementor_active() {
+	return did_action( 'elementor/loaded' );
+}
+
+/**
+ * Simple Hello World widget class.
+ */
+class ESW_Hello_World_Widget extends \Elementor\Widget_Base
+{
+	public function get_name() {
+		return 'esw_hello_world';
+	}
+	public function get_title() {
+		return __( 'ESW Hello World', 'esw' );
+	}
+	public function get_icon() {
+		return 'eicon-editor-bold';
+	}
+	public function get_categories() {
+		// Puts it in the "General" category.
+		return [ 'general' ];
+	}
+	protected function register_controls() {
+		$this->start_controls_section(
+			'content_section',
+			[
+				'label' => __( 'Content', 'esw' ),
+				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+			]
+		);
+		$this->add_control(
+			'title',
+			[
+				'label'       => __( 'Title', 'esw' ),
+				'type'        => \Elementor\Controls_Manager::TEXT,
+				'default'     => __( 'Hello from a custom widget!', 'esw' ),
+				'placeholder' => __( 'Enter your text', 'esw' ),
+			]
+		);
+		$this->end_controls_section();
+	}
+	protected function render() {
+		$settings = $this->get_settings_for_display();
+		echo '<div class="esw-hello-world">' . esc_html( $settings['title'] ) . '</div>';
+	}
+}
+
+/**
+ * Register the widget with Elementor.
+ */
+function esw_register_widgets( $widgets_manager ) {
+	if ( ! esw_check_elementor_active() ) {
+		return;
+	}
+
+	$widgets_manager->register( new \ESW_Hello_World_Widget() );
+}
+
+add_action( 'elementor/widgets/register', 'esw_register_widgets' );
+```
+
+- [https://developers.elementor.com/docs/widgets/widget-structure/](https://developers.elementor.com/docs/widgets/widget-structure/)
+- [https://developers.elementor.com/docs/getting-started/first-addon/](https://developers.elementor.com/docs/getting-started/first-addon/)
+- [https://developers.elementor.com/docs/widgets/widget-structure/](https://developers.elementor.com/docs/widgets/widget-structure/)
 
 ---
 
-# 6. Setting Global Typography and Styles
+## Setting Global Typography and Styles
 
 Consistency is critical when working at scale.
 
