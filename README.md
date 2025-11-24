@@ -113,7 +113,6 @@ mailpit
 ```
 
 - Mailpit Docs: [https://github.com/axllent/mailpit](https://github.com/axllent/mailpit)
-
 - SMTP: `127.0.0.1:1025`
 - UI: [localhost:8025](http://localhost:8025)
 
