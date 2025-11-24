@@ -708,12 +708,76 @@ Inside **WooCommerce → Settings → Payments → PayPal**:
 
 - [PayPal Sandbox Setup Guide](https://developer.paypal.com/tools/sandbox/)
 
+### Common WooCommerce + Elementor Issues and How to Fix Them
+
+When integrating WooCommerce with Elementor, a few recurring issues tend to appear—especially around product templates, checkout pages, styles not applying, and conflicting plugins. Below is a concise troubleshooting section you can add to your blog post.
+
+#### <ins>WooCommerce Pages Missing (Shop, Cart, Checkout, My Account)</ins>
+
+| **Symptoms**               | **Fix**                                                         |
+| -------------------------- | --------------------------------------------------------------- |
+| Page not found errors      | Assign WooCommerce pages: **WooCommerce → Settings → Advanced** |
+| Cart or Checkout blank     | Create missing pages and assign them                            |
+| Shop redirects to homepage | Go to **Settings → Permalinks → Save** to flush permalinks      |
 
 
+#### <ins>Elementor Template Not Applying to Product Pages</ins>
 
+| **Symptoms**                                | **Fix**                                                         |
+| ------------------------------------------- | --------------------------------------------------------------- |
+| Custom single product template not showing  | Check **Theme Builder → Single Product → Display Conditions**   |
+| Default theme template overrides Elementor  | Disable theme product layouts in **Customizer → WooCommerce**   |
+| Only some products display the new template | Apply conditions to **All Products** instead of individual ones |
 
+#### <ins>CSS or Styles Not Applying</ins>
 
+| **Symptoms**                                   | **Fix**                                                 |
+| ---------------------------------------------- | ------------------------------------------------------- |
+| Colors, spacing, or fonts do not change        | Clear CSS cache: **Elementor → Tools → Regenerate CSS** |
+| Styles overridden by theme or WooCommerce CSS  | Use more specific CSS selectors                         |
+| Layout shifts when DOM Optimization is enabled | Disable **Optimized DOM Output** in Elementor Features  |
+| Changes not showing after update               | Purge caching plugins + Cloudflare/LiteSpeed caches     |
 
+#### <ins>Add to Cart Button Not Working (AJAX Issues)</ins>
+
+| **Symptoms**                      | **Fix**                                                                    |
+| --------------------------------- | -------------------------------------------------------------------------- |
+| Clicking Add to Cart does nothing | Enable AJAX add-to-cart: **WooCommerce → Products → Add to Cart Behavior** |
+| Cart does not refresh or update   | Disable JS optimization (Combine/Minify/Defer) in caching plugins          |
+| Mini cart does not update         | Disable conflicting cart/mini-cart plugins temporarily                     |
+
+#### <ins>Cart or Checkout Pages Breaking in Elementor</ins>
+
+| **Symptoms**                             | **Fix**                                                                  |
+| ---------------------------------------- | ------------------------------------------------------------------------ |
+| Layout broken or fields misaligned       | Use Elementor’s **Cart** and **Checkout** widgets (Pro)                  |
+| Buttons overlapping or sections missing  | Avoid editing native WooCommerce shortcodes                              |
+| Shipping or payment sections not loading | Disable conflicting “One-Page Checkout” or checkout optimization plugins |
+
+#### <ins>PayPal Payment Errors (Sandbox or Live)</ins>
+
+| **Symptoms**                     | **Fix**                                                         |
+| -------------------------------- | --------------------------------------------------------------- |
+| Payment fails with error message | Ensure correct **Sandbox vs Live** API credentials              |
+| Sandbox orders not completing    | Recreate sandbox accounts in developer dashboard                |
+| PayPal button not showing        | Disable JS/cookie blockers or caching on checkout               |
+| Hard-to-debug errors             | Enable logging → see logs under **WooCommerce → Status → Logs** |
+
+#### <ins>Product Images Blurry or Wrong Size</ins>
+
+| **Symptoms**                       | **Fix**                                        |
+| ---------------------------------- | ---------------------------------------------- |
+| Product images appear blurry       | Regenerate thumbnails via plugin               |
+| Wrong cropping or dimensions       | Adjust WooCommerce image settings + regenerate |
+| Images look stretched in Elementor | Set image widget to **Full** or correct ratio  |
+
+#### <ins>Inventory Not Updating After Purchases</ins>
+
+| **Symptoms**                                    | **Fix**                                              |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| Stock level not decreasing                      | Check **Products → Inventory → Hold Stock** settings |
+| Orders stuck in “Pending” causing stock to lock | Lower Hold Stock time or disable                     |
+| Cached cart shows incorrect inventory           | Exclude Cart/Checkout from caching plugins           |
 
 ---
 
