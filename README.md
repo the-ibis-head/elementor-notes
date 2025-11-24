@@ -595,6 +595,170 @@ video.addEventListener("loadedmetadata", function() {
 - Performance matters: Large video files + high resolution can cause jank.
 - Combine text animations + scroll: While your video scrolls, you can overlay text via Elementor (with GSAP or Elementor’s Motion Effects) to reinforce storytelling.
 
+---
+
+
+
+## Integrating Google Maps With Elementor
+
+Elementor makes it simple to embed a Google Map, but adding **API keys**, **advanced map settings**, and **custom markers** requires a bit of setup.
+
+### 1. Enable the Google Maps API & Get Your API Key
+
+Before Elementor can render interactive Google Maps, you must enable the proper APIs inside the Google Cloud Console.
+
+1. Visit **Google Cloud Console** → *APIs & Services*.
+2. Enable at least:
+
+   * **Maps JavaScript API**
+   * **Geocoding API** (optional, for address lookups)
+   * **Places API** (optional, for autocomplete)
+     
+3. Create or use an existing API key.
+4. Restrict the key to your domain for security.
+
+- [https://developers.google.com/maps/documentation/javascript](https://developers.google.com/maps/documentation/javascript)
+- [https://console.cloud.google.com/apis](https://console.cloud.google.com/apis)
+
+### 2. Adding a Google Map Using Elementor’s Built-In Widget
+
+The **Elementor Google Maps widget** (free version) lets you quickly embed a basic map:
+
+1. Drag **Google Maps** widget into your page.
+2. In **Content → Location**, enter an address.
+3. In **Settings**, adjust:
+
+   * Zoom level
+   * Height
+   * Map Style (e.g., SnazzyMaps custom styles)
+
+### Adding a Google Map With Custom Pins (Code Example)
+
+To add a **custom pin icon**, you’ll load the Maps JavaScript API and initialize your own map inside an HTML widget.
+
+**Steps**
+
+1. Add an **HTML widget** inside Elementor.
+2. Paste the following minimal code:
+
+```html
+<div id="customMap" style="width:100%;height:400px;"></div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+<script>
+  function initMap() {
+    const position = { lat: 40.741, lng: -73.989 };
+    const map = new google.maps.Map(document.getElementById("customMap"), {
+      center: position,
+      zoom: 14,
+      styles: [], // optional custom map styles
+    });
+    new google.maps.Marker({
+      position,
+      map,
+      icon: {
+        url: "https://yourdomain.com/path/custom-pin.png",
+        scaledSize: new google.maps.Size(40, 40)
+      }
+    });
+  }
+  window.onload = initMap;
+</script>
+```
+
+- [https://developers.google.com/maps/documentation/javascript/markers](https://developers.google.com/maps/documentation/javascript/markers)**
+
+### Using Multiple Custom Pins (Dynamic or Static)
+
+To add **multiple markers**, simply loop through a list:
+
+```html
+<script>
+  const locations = [
+    { lat: 40.741, lng: -73.989, icon: "/pins/blue.png" },
+    { lat: 40.744, lng: -73.982, icon: "/pins/red.png" }
+  ];
+  function initMap() {
+    const map = new google.maps.Map(document.getElementById("customMap"), {
+      center: locations[0],
+      zoom: 13
+    });
+    locations.forEach(loc => {
+      new google.maps.Marker({
+        position: loc,
+        map,
+        icon: {
+          url: loc.icon,
+          scaledSize: new google.maps.Size(36, 36)
+        }
+      });
+    });
+  }
+  window.onload = initMap;
+</script>
+```
+
+- [https://developers.google.com/maps/documentation/javascript/custom-markers](https://developers.google.com/maps/documentation/javascript/custom-markers)**
+
+
+### Using Custom Map Styles (Dark Mode, Minimal, etc.)
+
+You can apply custom map themes by using the **SnazzyMaps** plugin and pasting the style JSON into the map:
+
+```js
+const map = new google.maps.Map(document.getElementById("customMap"), {
+  center: position,
+  zoom: 14,
+  styles: snazzyMapStyle
+});
+```
+
+- [https://snazzymaps.com](https://snazzymaps.com)
+
+### Making Map Widgets Reusable (Elementor Templates)
+
+If you frequently embed maps with custom styling or icons:
+
+1. Create a new **Elementor Template > Section**.
+2. Insert your HTML-map widget.
+3. Replace coordinates or icons with dynamic fields (ACF, Pods, or Elementor Custom Fields).
+4. Save and reuse across pages.
+
+This gives you consistent styling and faster site-building.
+
+### Troubleshooting Common Google Maps Issues in Elementor
+
+| Issue                                     | Fix                                                       |
+| ----------------------------------------- | --------------------------------------------------------- |
+| Map not loading                           | Verify API key, domain restrictions, billing enabled      |
+| “For development purposes only” watermark | Enable billing in Google Cloud                            |
+| Custom pin not appearing                  | Check URL path & icon size                                |
+| Map crashes in Elementor preview          | Try viewing from front-end or disable conflicting plugins |
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -737,20 +901,7 @@ Elementor embeds videos using iframe players, so tracking requires GTM or the Yo
 
 Works even for videos placed inside Elementor widgets, popups, tabs, or sliders.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---
 
 # Conclusion
 
