@@ -1,416 +1,320 @@
 # Mastering Elementor
 
-**Estimated Reading Time:** ~18–22 minutes
+**Time to Read:** ~13 minutes
 
-Elementor has evolved into a full-stack site-building ecosystem. To build high-quality, scalable environments, developers must be able to work locally, extend templates, customize WooCommerce, implement advanced animations, and integrate APIs.
-
-This guide provides a detailed, developer-focused walkthrough across every major Elementor capability.
+Elementor has evolved into one of the most powerful visual builders in the WordPress ecosystem. Whether you are a freelancer, agency, or in-house developer, Elementor’s combination of design freedom, extensibility, and workflow optimizations makes it a must-know tool. This guide delivers a clear, technical path to mastering Elementor—from high-performance local development using Laravel Valet to advanced design workflows and version control.
 
 ---
 
-## Local Development Setup with Laravel Valet and WP-CLI
+# 1. Local Setup with Laravel Valet and WP-CLI
 
-### Install Valet
+Setting up a fast, lightweight, UNIX-native WordPress development environment is the first step to developing professionally with Elementor. **Laravel Valet** offers a minimalistic, always-on dev stack that pairs perfectly with **WP-CLI** for rapid iteration.
+
+Below is the clean, consolidated setup process for macOS.
+
+---
+
+## 1.1 Install Homebrew
+
+Homebrew is your system-level package manager.
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+```
+
+Reload shell:
+
+```bash
+eval "$(/opt/homebrew/bin/brew shellenv)"
+```
+
+---
+
+## 1.2 Install PHP 8.x, Composer, and Required Tools
+
+```bash
+brew install php composer wp-cli mariadb nginx
+brew services start mariadb
+```
+
+Verify versions:
+
+```bash
+php -v
+composer -V
+wp --info
+```
+
+---
+
+## 1.3 Install Laravel Valet
+
+Valet gives you an automatic HTTPS-enabled dev environment with zero configuration.
 
 ```bash
 composer global require laravel/valet
 valet install
 ```
 
-### Setup WordPress
+Optional (recommended):
 
 ```bash
-mkdir ~/Sites/my-elementor-site
-cd ~/Sites/my-elementor-site
-
-wp core download
-wp config create --dbname=elementor --dbuser=root
-wp db create
-
-wp core install \
-  --url="my-elementor-site.test" \
-  --title="Elementor Lab" \
-  --admin_user="admin" \
-  --admin_password="password" \
-  --admin_email="you@example.com"
+valet trust
 ```
 
-Park the directory:
+---
+
+## 1.4 Create Your WordPress Development Directory
+
+This will be your workspace for all sites.
 
 ```bash
+mkdir ~/Sites
+cd ~/Sites
 valet park
 ```
 
-**References:**
+Valet will now auto-resolve any folder inside `~/Sites` as:
 
-* [https://laravel.com/docs/valet](https://laravel.com/docs/valet)
-* [https://wp-cli.org/](https://wp-cli.org/)
-
----
-
-## Elementor Free vs. Elementor Pro
-
-### Free features
-
-* Core widget library
-* Drag-and-drop builder
-* Basic templates
-* Basic responsive settings
-
-### Pro features
-
-* Theme Builder (headers, footers, archives, single templates)
-* WooCommerce Builder
-* Popup Builder
-* Advanced form widgets
-* Dynamic data
-* Lottie, flip boxes, posts, global widgets
-
-**Reference:** [https://elementor.com/pricing/](https://elementor.com/pricing/)
-
----
-
-## Rolling Back to Previous Versions
-
-### WordPress Repository (Elementor Free)
-
-Download older versions:
-[https://wordpress.org/plugins/elementor/advanced/](https://wordpress.org/plugins/elementor/advanced/)
-
-### WP-CLI Rollback
-
-```bash
-wp plugin install elementor --version=3.22.0 --force
-wp plugin install elementor-pro --version=3.22.1 --force
+```
+http://folder-name.test
 ```
 
 ---
 
-## Keyboard Shortcuts
+## 1.5 Create a New WordPress Site
 
-| Shortcut             | Action               |
-| -------------------- | -------------------- |
-| Ctrl/Cmd + Shift + L | Navigator            |
-| Ctrl/Cmd + E         | Finder               |
-| Ctrl/Cmd + P         | Command Search       |
-| Ctrl/Cmd + S         | Save                 |
-| Ctrl/Cmd + I         | Inline Editing Panel |
+```bash
+mkdir mastering-elementor
+cd mastering-elementor
 
-**Reference:** [https://elementor.com/help/keyboard-shortcuts/](https://elementor.com/help/keyboard-shortcuts/)
+wp core download
+wp config create --dbname=me_local --dbuser=root --dbpass=''
+wp db create
+wp core install \
+  --url="https://mastering-elementor.test" \
+  --title="Mastering Elementor" \
+  --admin_user="admin" \
+  --admin_password="password" \
+  --admin_email="admin@example.com"
+```
 
----
+Enable HTTPS:
 
-## Adding Favorite Widgets
-
-1. Right-click a widget in the panel.
-2. Click “Add to Favorites.”
-3. Access under the **Favorites** tab.
-
----
-
-## Setting Global Typography and Styles
-
-Navigate to:
-Elementor → Site Settings → Global Styles → Typography
-
-Configure:
-
-* Body text
-* Heading hierarchy
-* Link styles
-* Global color palette
-
-**Reference:** [https://elementor.com/help/global-settings/](https://elementor.com/help/global-settings/)
+```bash
+valet secure mastering-elementor
+```
 
 ---
 
-## Creating Headers and Footers Using Theme Builder
+## 1.6 Install Astra Theme + Elementor Automatically
+
+```bash
+wp theme install astra --activate
+wp plugin install elementor --activate
+wp plugin install astra-addon --activate --allow-root || true
+```
+
+(If you have a paid Astra license, the add-on plugin requires manual upload or license activation.)
+
+---
+
+## 1.7 Optional: Reset Site Quickly During Development
+
+A helpful tool when repeatedly testing Elementor content structures.
+
+```bash
+wp plugin install wordpress-reset --activate
+wp reset site --yes
+```
+
+---
+
+# 2. Free vs Pro: What You Should Actually Use
+
+Both versions of Elementor are strong, but the **Pro** version unlocks workflow efficiencies that matter for production environments.
+
+| Feature                                      | Free    | Pro  |
+| -------------------------------------------- | ------- | ---- |
+| Drag-and-drop page builder                   | Yes     | Yes  |
+| Theme Builder (Header, Footer, Archive, 404) | No      | Yes  |
+| Dynamic Fields / ACF / CPT Support           | No      | Yes  |
+| Popup Builder                                | No      | Yes  |
+| WooCommerce Builder                          | Limited | Full |
+| Advanced widgets (Forms, Posts, Nav Menu)    | No      | Yes  |
+| Custom CSS per element                       | Basic   | Full |
+| Motion effects, scroll effects               | Basic   | Full |
+
+Recommendation:
+If you're building more than two commercial sites per year or using CPT/ACF, Elementor Pro pays for itself immediately.
+
+---
+
+# 3. Rolling Back Elementor Versions
+
+Elementor provides version control inside WordPress. This is invaluable when troubleshooting plugin conflicts or regressions.
+
+### Roll back from Dashboard
+
+WordPress Admin →
+**Elementor → Tools → Version Control → Rollback**
+
+### Using WP-CLI
+
+Run:
+
+```bash
+wp plugin install elementor --version=3.20.1 --force
+```
+
+Replace with required version number.
+
+---
+
+# 4. Keyboard Shortcuts for Power Users
+
+| Action                   | Shortcut             |
+| ------------------------ | -------------------- |
+| Show Navigator           | Cmd/Ctrl + I         |
+| Finder (search elements) | Cmd/Ctrl + E         |
+| Switch Panel ↔ Canvas    | Cmd/Ctrl + P         |
+| Undo                     | Cmd/Ctrl + Z         |
+| Redo                     | Cmd/Ctrl + Shift + Z |
+| Save                     | Cmd/Ctrl + S         |
+| Responsive Mode          | Cmd/Ctrl + Shift + M |
+
+Full list:
+[https://elementor.com/help/keyboard-shortcuts](https://elementor.com/help/keyboard-shortcuts)
+
+---
+
+# 5. Adding and Managing Favorite Widgets
+
+Elementor allows pinning frequently used widgets to speed up workflow.
 
 Steps:
 
-1. Go to Templates → Theme Builder
-2. Select **Header** or **Footer**
-3. Build the layout
-4. Set Display Conditions (Entire Site, Single Page, Archive, WooCommerce, etc.)
+1. Open Elementor editor
+2. Hover any widget → Right-click
+3. Choose **Add to Favorites**
+
+This creates a “Favorites” tab for fast access.
 
 ---
 
-## Using Templates and Blocks (Including Export/Import)
+# 6. Setting Global Typography and Styles
 
-### Export Template
+Consistency is critical when working at scale.
 
-Templates → Saved Templates → Export
+### Where to Configure
+
+WordPress Admin →
+**Elementor → Site Settings**
+
+Configure:
+
+* Global colors
+* Global typography
+* Buttons
+* Form fields
+* Images
+* Theme styles
+
+Once saved, all new widgets inherit defaults unless manually overridden.
+
+---
+
+# 7. Setting Headers and Footers (Theme Builder)
+
+Requires Elementor Pro.
+
+### Create a Global Header
+
+1. Templates → Theme Builder → Header
+2. Add new template
+3. Use Nav Menu + Logo widget
+4. Publish with conditions:
+
+   * **Entire Site**, or
+   * Specific post types, categories, or pages
+
+### Create a Global Footer
+
+Same process via Theme Builder → Footer.
+
+---
+
+# 8. Using Templates and Blocks (Import/Export Included)
+
+### Insert Library Templates
+
+Inside Elementor editor:
+
+* Template → Add Template
+* Choose from **Blocks**, **Pages**, or **My Templates**
+
+### Export Your Template
+
+Templates → Saved Templates → Export JSON
 
 ### Import Template
 
 Templates → Import Templates → Upload JSON
 
-### Render Template Programmatically
-
-```php
-echo \Elementor\Plugin::$instance
-  ->frontend
-  ->get_builder_content_for_display(123);
-```
-
-**Reference:** [https://elementor.com/help/templates/](https://elementor.com/help/templates/)
+Great for sharing components across client projects or maintaining your own starter kits.
 
 ---
 
-## Using Custom CSS and JavaScript
+# 9. Using Custom CSS and JavaScript
 
-### Elementor Pro Custom CSS
+### Elementor Pro
 
-```css
-selector:hover {
-  transform: scale(1.05);
+Per-widget CSS is available under:
+Advanced → Custom CSS
+
+### Site-wide CSS/JS
+
+Use:
+
+```php
+function me_enqueue_scripts() {
+    wp_enqueue_style('me-custom', get_stylesheet_directory_uri() . '/custom.css');
+    wp_enqueue_script('me-custom-js', get_stylesheet_directory_uri() . '/custom.js', [], null, true);
 }
+add_action('wp_enqueue_scripts', 'me_enqueue_scripts');
 ```
 
-### Theme-Level JavaScript
+Place inside `functions.php` of your child theme.
 
-`/wp-content/themes/your-theme/js/custom.js`
+---
+
+# 10. Text Animations (Typing Effects, Transitions, Scroll Animations)
+
+Elementor Pro includes motion effects:
+
+* Entrance animations
+* Scrolling effects (parallax, rotate, opacity)
+* Mouse-track animations
+* Transformations (scale, rotate, skew)
+
+For typing animations, use:
+
+* Elementor’s built-in "Animated Headline" widget, or
+* Custom JS such as Typed.js when finer control is needed.
+
+Example:
 
 ```javascript
-document.addEventListener('DOMContentLoaded', () => {
-  console.log("Custom Elementor script loaded.");
-});
-```
-
-Enqueue the script:
-
-```php
-add_action('wp_enqueue_scripts', function () {
-    wp_enqueue_script(
-        'custom-js',
-        get_stylesheet_directory_uri().'/js/custom.js',
-        [],
-        false,
-        true
-    );
-});
-```
-
----
-
-## Using Text Animations
-
-Example using Typed.js:
-
-```html
-<span id="typed"></span>
-
-<script>
-new Typed('#typed', {
-  strings: ["Fast.", "Flexible.", "Powerful."],
+var typed = new Typed('.typed-text', {
+  strings: ["Mastering Elementor", "Building Modern Websites"],
   typeSpeed: 50,
+  backSpeed: 25,
   loop: true
 });
-</script>
 ```
 
 ---
 
-## GSAP Animations and Video-Scrolling
+# Conclusion
 
-### Basic GSAP Animation
-
-```javascript
-gsap.from(".hero-title", {
-  y: 80,
-  opacity: 0,
-  duration: 1.2
-});
-```
-
-### GSAP ScrollTrigger with Video Sync
-
-```javascript
-gsap.registerPlugin(ScrollTrigger);
-
-ScrollTrigger.create({
-  trigger: ".video-section",
-  start: "top top",
-  end: "bottom bottom",
-  scrub: true,
-  onUpdate: (self) => {
-    const video = document.querySelector("video");
-    video.currentTime = video.duration * self.progress;
-  }
-});
-```
-
-**Reference:** [https://gsap.com/](https://gsap.com/)
-
----
-
-## Integrating Google Analytics
-
-### Recommended: Site Kit by Google
-
-[https://wordpress.org/plugins/google-site-kit/](https://wordpress.org/plugins/google-site-kit/)
-
-### Manual GA4 Installation
-
-```php
-add_action('wp_head', function () {
-?>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXX"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-XXXX');
-</script>
-<?php
-});
-```
-
----
-
-## Integrating Google Maps
-
-### Elementor Pro Map Widget
-
-Requires API key:
-[https://developers.google.com/maps/documentation/javascript/get-api-key](https://developers.google.com/maps/documentation/javascript/get-api-key)
-
-### Basic Embed
-
-```html
-<iframe 
- height="400"
- width="100%"
- src="https://www.google.com/maps/embed/v1/place?key=YOUR_KEY&q=Boston,MA">
-</iframe>
-```
-
----
-
-## Integrating Typeform
-
-Embed via HTML widget:
-
-```html
-<div data-tf-live="xxxxxx"></div>
-<script src="//embed.typeform.com/next/embed.js"></script>
-```
-
----
-
-## Integrating and Customizing WooCommerce with PayPal Payments
-
-Install plugin:
-[https://wordpress.org/plugins/woocommerce-paypal-payments/](https://wordpress.org/plugins/woocommerce-paypal-payments/)
-
-Configure in:
-
-WooCommerce → Settings → Payments → PayPal
-
-Supports:
-
-* Smart Buttons
-* Pay Later
-* Vaulting
-* Subscriptions (with add-ons)
-
----
-
-## Customizing WooCommerce Product Pages
-
-### Adjust Quantity Input Minimum
-
-```php
-add_filter('woocommerce_quantity_input_args', function ($args) {
-    $args['min_value'] = 2;
-    return $args;
-});
-```
-
-### Remove Tabs
-
-```php
-add_filter('woocommerce_product_tabs', function ($tabs) {
-    unset($tabs['reviews']);
-    return $tabs;
-});
-```
-
----
-
-## Using WC CLI Commands
-
-```bash
-wp wc product list
-wp wc order list --status=completed
-wp wc customer create --email="test@example.com"
-```
-
-**Reference:** [https://woocommerce.com/document/cli/](https://woocommerce.com/document/cli/)
-
----
-
-## Using the WooCommerce REST API
-
-### List Products
-
-```bash
-curl https://example.com/wp-json/wc/v3/products \
-  -u consumer_key:consumer_secret
-```
-
-### Create Product
-
-```bash
-curl -X POST https://example.com/wp-json/wc/v3/products \
-  -u ck:cs \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Custom Elementor Product",
-    "type": "simple",
-    "regular_price": "29.99"
-  }'
-```
-
-**API Reference:**
-[https://woocommerce.github.io/woocommerce-rest-api-docs/](https://woocommerce.github.io/woocommerce-rest-api-docs/)
-
----
-
-## Creating Custom Plugins That Integrate with Elementor
-
-### Basic Plugin Loader
-
-`wp-content/plugins/elementor-lab/elementor-lab.php`
-
-```php
-<?php
-/**
- * Plugin Name: Elementor Lab
- */
-
-add_action('elementor/widgets/widgets_registered', function () {
-    require_once __DIR__.'/widgets/my-widget.php';
-});
-```
-
-### Example Custom Elementor Widget
-
-```php
-class My_Custom_Widget extends \Elementor\Widget_Base {
-
-    public function get_name() { return 'my_widget'; }
-    public function get_title() { return 'My Widget'; }
-    public function get_icon() { return 'eicon-code'; }
-
-    protected function render() {
-        echo "<div class='my-widget'>Hello from a custom widget.</div>";
-    }
-}
-```
-
----
-
-## Final Thoughts
-
-Elementor is far more powerful than a traditional visual builder. When combined with modern local development workflows, dynamic data, GSAP animations, REST APIs, Typeform integrations, and WooCommerce customization, it becomes a full web application layer on top of WordPress.
+Mastering Elementor is fundamentally about mastering process—not just design. With a fast, automated dev environment powered by Laravel Valet, WP-CLI, and modern theme frameworks like Astra, you can build, test, rollback, version, and customize Elementor projects with speed and confidence.
