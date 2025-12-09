@@ -1,4 +1,5 @@
 # Elementor Notes
+> Compiled notes on elementor
 
 Elementor has evolved into one of the most powerful visual builders in the WordPress ecosystem. 
 This guide delivers a clear, technical path to mastering Elementor.
