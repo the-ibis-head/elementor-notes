@@ -1,4 +1,4 @@
-# Mastering Elementor
+# Elementor Notes
 
 **Time to Read:** ~8 minutes
 
