@@ -1,4 +1,4 @@
-# Elementor Notes
+# Elementor
 > Compiled notes on elementor
 
 Elementor has evolved into one of the most powerful visual builders in the WordPress ecosystem. 
